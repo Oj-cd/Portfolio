@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jerry Olaojo · Gameplay Programmer</title>
+<meta name="description" content="Jerry Olaojo is a gameplay programmer building combat and gameplay systems in Unity and Unreal Engine 5. Gameplay programmer on Rekindled, launching on Steam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ash:#16181f;
+    --char:#20232d;
+    --line:#31353f;
+    --parchment:#ece5da;
+    --smoke:#9aa0ad;
+    --ember:#d1495b;
+    --flame:#e8853d;
+    --max:1080px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ash);
+    color:var(--parchment);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--parchment)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--flame);outline-offset:3px;border-radius:2px}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  .mono{font-family:"IBM Plex Mono",monospace}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none}
+  .navname span{color:var(--ember)}
+  .navlinks{display:flex;gap:26px}
+  .navlinks a{font-size:14px;color:var(--smoke);text-decoration:none;letter-spacing:.04em}
+  .navlinks a:hover{color:var(--parchment)}
+
+  /* ---------- hero ---------- */
+  header{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  #embers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .hero{position:relative;padding:110px 0 96px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--flame);margin-bottom:22px}
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-weight:800;
+    font-size:clamp(2.4rem,6.4vw,4.4rem);
+    line-height:1.04;letter-spacing:-.015em;
+    max-width:14ch;
+  }
+  h1 em{font-style:normal;color:var(--ember)}
+  .herosub{margin-top:26px;max-width:56ch;color:var(--smoke);font-size:18px}
+  .herosub strong{color:var(--parchment);font-weight:600}
+  .cta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:12px 22px;border-radius:6px;
+    font-size:15px;font-weight:600;text-decoration:none;letter-spacing:.02em;
+    border:1px solid var(--line);color:var(--parchment);
+    transition:transform .15s ease,border-color .15s ease,background .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);border-color:var(--smoke)}
+  .btn.primary{background:linear-gradient(120deg,var(--ember),var(--flame));border:none;color:#fff}
+  .btn.primary:hover{filter:brightness(1.07)}
+
+  /* ---------- sections ---------- */
+  section{padding:84px 0;border-bottom:1px solid var(--line)}
+  .seclabel{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+  .seclabel::before{content:"";width:12px;height:12px;background:var(--ember)}
+  .seclabel h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:.18em;text-transform:uppercase}
+
+  /* ---------- flagship ---------- */
+  .flagship{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:start}
+  .gametitle{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2.1rem;letter-spacing:-.01em}
+  .gamestatus{display:inline-block;margin:14px 0 18px;padding:5px 12px;border:1px solid var(--flame);border-radius:99px;color:var(--flame);font-size:12.5px;letter-spacing:.08em;font-family:"IBM Plex Mono",monospace}
+  .flagship p{color:var(--smoke)}
+  .flagship p + p{margin-top:14px}
+  .flagship p strong{color:var(--parchment);font-weight:600}
+  .sys{margin-top:26px;display:flex;flex-wrap:wrap;gap:9px}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:4px;color:var(--smoke)}
+  .chip.hot{border-color:var(--ember);color:var(--parchment)}
+
+  .media{
+    border:1.5px dashed var(--line);border-radius:10px;background:var(--char);
+    aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    color:var(--smoke);text-align:center;padding:20px;
+  }
+  .media .mono{font-size:12.5px;color:var(--flame)}
+  .media + .media{margin-top:18px;aspect-ratio:21/9}
+
+  /* ---------- project cards ---------- */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .card{
+    background:var(--char);border:1px solid var(--line);border-radius:10px;padding:30px;
+    display:flex;flex-direction:column;gap:14px;
+    transition:transform .15s ease,border-color .15s ease;
+  }
+  .card:hover{transform:translateY(-3px);border-color:#454a57}
+  .card h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.35rem}
+  .role{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--flame);letter-spacing:.06em}
+  .card p{color:var(--smoke);font-size:15.5px}
+  .card .media{aspect-ratio:16/9;margin-top:4px}
+
+  /* ---------- how I work ---------- */
+  .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .principle h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:10px}
+  .principle h3::before{content:"▪ ";color:var(--ember)}
+  .principle p{color:var(--smoke);font-size:15.5px}
+
+  /* ---------- skills ---------- */
+  .skills{display:flex;flex-wrap:wrap;gap:10px}
+  .skills .chip{font-size:13.5px;padding:8px 14px}
+
+  /* ---------- contact ---------- */
+  .contact{text-align:left}
+  .contact h2.big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(1.8rem,4.5vw,3rem);letter-spacing:-.01em;max-width:20ch}
+  .contact h2.big em{font-style:normal;color:var(--ember)}
+  .contact p{margin-top:18px;color:var(--smoke);max-width:52ch}
+  footer{padding:34px 0;color:var(--smoke);font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media (max-width:860px){
+    .flagship{grid-template-columns:1fr}
+    .cards{grid-template-columns:1fr}
+    .principles{grid-template-columns:1fr}
+    .navlinks{display:none}
+    .hero{padding:80px 0 70px}
+    section{padding:64px 0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .btn,.card{transition:none}
+    #embers{display:none}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="#top">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="#rekindled">Rekindled</a>
+      <a href="#projects">Projects</a>
+      <a href="#how">How I work</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <canvas id="embers" aria-hidden="true"></canvas>
+  <div class="wrap hero">
+    <div class="eyebrow">Gameplay Programmer · Vancouver, BC</div>
+    <h1>I write the code <em>players touch.</em></h1>
+    <p class="herosub">
+      Spells, input, puzzles, checkpoints. On <strong>Rekindled</strong>, a spell combat game
+      launching on Steam in August 2026, every gameplay system runs through code I built
+      with a team of six at Vancouver Film School.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:Jerryojo178@gmail.com">Email me</a>
+      <a class="btn" href="https://github.com/Oj-cd">GitHub</a>
+      <!-- Add your LinkedIn URL below, then remove this comment -->
+      <a class="btn" href="#">LinkedIn</a>
+    </div>
+  </div>
+</header>
+
+<section id="rekindled">
+  <div class="wrap">
+    <div class="seclabel"><h2>Flagship · Rekindled</h2></div>
+    <div class="flagship">
+      <div>
+        <div class="gametitle">Rekindled</div>
+        <div class="gamestatus">LAUNCHING ON STEAM · AUGUST 2026</div>
+        <p>
+          A mechanically rich spell combat game where 2D characters fight through a fully 3D
+          world, combining elemental spells in real time as a phoenix reborn from the ashes.
+          Built in Unity 6 HDRP by a team of six.
+        </p>
+        <p>
+          <strong>My role:</strong> gameplay programmer. I architected the spell framework all
+          six elemental spells run on, the combo system designers drive through data, input and
+          rebinding across keyboard and controllers, puzzles and interactables, performance,
+          and Steam integration. I also contributed to enemy AI design.
+        </p>
+        <div class="sys">
+          <span class="chip hot">Spell framework</span>
+          <span class="chip hot">Combo system</span>
+          <span class="chip">Input &amp; rebinding</span>
+          <span class="chip">Puzzles &amp; interactables</span>
+          <span class="chip">Performance</span>
+          <span class="chip">Steam integration</span>
+          <span class="chip">Enemy AI design</span>
+        </div>
+        <!-- When your Steam page is live, add the link here:
+        <div class="cta"><a class="btn primary" href="YOUR_STEAM_URL">Wishlist on Steam</a></div>
+        -->
+      </div>
+      <div>
+        <!-- Replace this block with your gameplay trailer.
+             YouTube embed example:
+             <iframe width="100%" style="aspect-ratio:16/9;border:0;border-radius:10px"
+               src="https://www.youtube.com/embed/VIDEO_ID" title="Rekindled gameplay"
+               allowfullscreen></iframe> -->
+        <div class="media">
+          <span class="mono">[ GAMEPLAY TRAILER ]</span>
+          <span>Drop a YouTube embed or a .mp4 here</span>
+        </div>
+        <!-- Replace with a wide screenshot: <img src="rekindled-combat.jpg" alt="Spell combat in Rekindled" style="width:100%;border-radius:10px"> -->
+        <div class="media">
+          <span class="mono">[ COMBAT SCREENSHOT ]</span>
+          <span>Spell combo moment works best</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="seclabel"><h2>More Projects</h2></div>
+    <div class="cards">
+      <div class="card">
+        <span class="role">SOLO · UNREAL ENGINE 5 · C++</span>
+        <h3>Swarm Boss Prototype</h3>
+        <p>
+          A boss made of hundreds of units flocking as one creature. Built alone in C++ using
+          BOIDS rules driven by a four state machine (Idle, Rush, Regroup, Orbit), with two pass
+          updates and instanced rendering holding frame cost steady as the swarm grows.
+        </p>
+        <!-- Replace with a short capture GIF or embed -->
+        <div class="media">
+          <span class="mono">[ SWARM CLIP ]</span>
+          <span>A GIF of the Rush phase sells this instantly</span>
+        </div>
+      </div>
+      <div class="card">
+        <span class="role">LEVEL DESIGNER &amp; PROGRAMMER · VFS TEAM PROJECT</span>
+        <h3>Monster Route</h3>
+        <p>
+          A game about a garbage man chasing a promotion by collecting trash across a town of
+          monsters. I took over level design mid production when the team lost its level designer,
+          laying out the town to balance trash routes against monster attacks and truck defense,
+          while still contributing gameplay code.
+        </p>
+        <!-- Replace with a level overview screenshot -->
+        <div class="media">
+          <span class="mono">[ LEVEL SCREENSHOT ]</span>
+          <span>Top down town layout or a busy gameplay moment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="seclabel"><h2>How I Work</h2></div>
+    <div class="principles">
+      <div class="principle">
+        <h3>Designers ship faster around me</h3>
+        <p>I build systems driven by data, so combos, encounters, and tuning change without a
+        code request. I measure my work by how rarely people need me after it exists.</p>
+      </div>
+      <div class="principle">
+        <h3>Performance is part of the design</h3>
+        <p>Object pooling, allocation control, and profiling until heavy combat holds steady.
+        My instincts come from fixing frame spikes on a real deadline, not from articles.</p>
+      </div>
+      <div class="principle">
+        <h3>The game shipping comes first</h3>
+        <p>When a team lost its level designer mid production, I switched roles and delivered
+        the levels while still writing code. Lanes matter less than launches.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="seclabel"><h2>Toolbox</h2></div>
+    <div class="skills">
+      <span class="chip hot">C#</span>
+      <span class="chip hot">Unity 6 (HDRP)</span>
+      <span class="chip">C++</span>
+      <span class="chip">Unreal Engine 5</span>
+      <span class="chip">Steamworks.NET</span>
+      <span class="chip">FMOD</span>
+      <span class="chip">Input System</span>
+      <span class="chip">Cinemachine 3</span>
+      <span class="chip">NavMesh</span>
+      <span class="chip">ScriptableObjects</span>
+      <span class="chip">Git</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2 class="big">Building something players will <em>touch?</em></h2>
+    <p>I'm looking for a small team where I can own gameplay systems and keep learning from
+    experienced programmers. Game Design diploma, Vancouver Film School, August 2026.</p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:Jerryojo178@gmail.com">Jerryojo178@gmail.com</a>
+      <a class="btn" href="https://github.com/Oj-cd">github.com/Oj-cd</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <span class="mono">Vancouver, BC</span>
+  </div>
+</footer>
+
+<script>
+// Rising ember particles in the hero. Skipped entirely if the visitor prefers reduced motion.
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.getElementById('embers');
+  const ctx = c.getContext('2d');
+  let w, h, embers = [];
+  function size(){
+    const r = c.parentElement.getBoundingClientRect();
+    w = c.width = r.width; h = c.height = r.height;
+  }
+  function spawn(){
+    return {
+      x: Math.random() * w,
+      y: h + 10,
+      r: 0.8 + Math.random() * 2.2,
+      vy: 0.25 + Math.random() * 0.7,
+      vx: (Math.random() - 0.5) * 0.3,
+      life: 0,
+      max: 260 + Math.random() * 240,
+      hue: Math.random() < 0.5 ? '209,73,91' : '232,133,61'
+    };
+  }
+  function tick(){
+    ctx.clearRect(0, 0, w, h);
+    if (embers.length < 34 && Math.random() < 0.35) embers.push(spawn());
+    embers = embers.filter(e => e.life < e.max && e.y > -10);
+    for (const e of embers){
+      e.life++; e.y -= e.vy; e.x += e.vx + Math.sin(e.life / 40) * 0.15;
+      const a = Math.max(0, 0.55 * (1 - e.life / e.max));
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + e.hue + ',' + a + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  size();
+  window.addEventListener('resize', size);
+  tick();
+})();
+</script>
+</body>
+</html>
