@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* ---------- root and reset ---------- */
   :root{
     --ash:#16181f;
     --char:#20232d;
@@ -17,7 +18,7 @@
     --smoke:#9aa0ad;
     --ember:#d1495b;
     --flame:#e8853d;
-    --max:min(94vw,1900px);
+    --max:min(94vw,1900px); /* percent based so the gutter scales with the screen, capped so lines do not get too wide on huge monitors */
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -30,7 +31,7 @@
   }
   a{color:var(--parchment)}
   a:focus-visible,button:focus-visible{outline:2px solid var(--flame);outline-offset:3px;border-radius:2px}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)} /* padding scales with the viewport, floor and ceiling stop it from feeling cramped or too wide */
   .mono{font-family:"IBM Plex Mono",monospace}
 
   /* ---------- nav ---------- */
@@ -45,7 +46,7 @@
   /* ---------- hero ---------- */
   header{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
   #embers{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .hero{position:relative;padding-top:110px;padding-bottom:96px}
+  .hero{position:relative;padding-top:110px;padding-bottom:96px} /* top and bottom only, so this never overrides the side padding wrap sets */
   .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--flame);margin-bottom:22px}
   h1{
     font-family:"Bricolage Grotesque",sans-serif;
@@ -68,14 +69,14 @@
   .btn.primary{background:linear-gradient(120deg,var(--ember),var(--flame));border:none;color:#fff}
   .btn.primary:hover{filter:brightness(1.07)}
 
-  /* ---------- sections ---------- */
+  /* ---------- section label ---------- */
   section{padding:84px 0;border-bottom:1px solid var(--line)}
   .seclabel{display:flex;align-items:center;gap:12px;margin-bottom:40px}
   .seclabel::before{content:"";width:12px;height:12px;background:var(--ember)}
   .seclabel h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:.18em;text-transform:uppercase}
 
   /* ---------- flagship ---------- */
-  .flagship{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .flagship{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center} /* centered so the shorter text column does not leave dead space below it when the media column is taller */
   .gametitle{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2.1rem;letter-spacing:-.01em}
   .gamestatus{display:inline-block;margin:14px 0 18px;padding:5px 12px;border:1px solid var(--flame);border-radius:99px;color:var(--flame);font-size:12.5px;letter-spacing:.08em;font-family:"IBM Plex Mono",monospace}
   .flagship p{color:var(--smoke)}
@@ -85,6 +86,7 @@
   .chip{font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:4px;color:var(--smoke)}
   .chip.hot{border-color:var(--ember);color:var(--parchment)}
 
+  /* ---------- media placeholder, shared by flagship and project cards ---------- */
   .media{
     border:1.5px dashed var(--line);border-radius:10px;background:var(--char);
     aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
@@ -116,7 +118,7 @@
   .skills{display:flex;flex-wrap:wrap;gap:10px}
   .skills .chip{font-size:13.5px;padding:8px 14px}
 
-  /* ---------- contact ---------- */
+  /* ---------- contact and footer ---------- */
   .contact{text-align:left}
   .contact h2.big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(1.8rem,4.5vw,3rem);letter-spacing:-.01em;max-width:20ch}
   .contact h2.big em{font-style:normal;color:var(--ember)}
@@ -124,6 +126,7 @@
   footer{padding:34px 0;color:var(--smoke);font-size:13.5px}
   footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
+  /* ---------- mobile layout ---------- */
   @media (max-width:860px){
     .flagship{grid-template-columns:1fr}
     .cards{grid-template-columns:1fr}
@@ -132,6 +135,8 @@
     .hero{padding-top:80px;padding-bottom:70px}
     section{padding:64px 0}
   }
+
+  /* ---------- reduced motion ---------- */
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .btn,.card{transition:none}
@@ -198,9 +203,7 @@
           <span class="chip">Steam integration</span>
           <span class="chip">Enemy AI design</span>
         </div>
-        <!-- When Steam page is live, remember to add the link here:
-        <div class="cta"><a class="btn primary" href="YOUR_STEAM_URL">Wishlist on Steam</a></div>
-        -->
+        <div class="cta"><a class="btn primary" href="https://store.steampowered.com/app/4926530/">Wishlist on Steam</a></div>
       </div>
       <div>
         <video controls muted playsinline
@@ -316,17 +319,22 @@
 // Rising ember particles in the hero. Skipped entirely if the visitor prefers reduced motion.
 (function(){
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const c = document.getElementById('embers');
-  const ctx = c.getContext('2d');
-  let w, h, embers = [];
+  const canvas = document.getElementById('embers');
+  const ctx = canvas.getContext('2d');
+  let canvasWidth, canvasHeight, embers = [];
+
+  // Match the canvas size to the header element so embers do not blur or get cut off
   function size(){
-    const r = c.parentElement.getBoundingClientRect();
-    w = c.width = r.width; h = c.height = r.height;
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvasWidth = canvas.width = rect.width;
+    canvasHeight = canvas.height = rect.height;
   }
+
+  // Create one ember at a random spot along the bottom edge
   function spawn(){
     return {
-      x: Math.random() * w,
-      y: h + 10,
+      x: Math.random() * canvasWidth,
+      y: canvasHeight + 10,
       r: 0.8 + Math.random() * 2.2,
       vy: 0.25 + Math.random() * 0.7,
       vx: (Math.random() - 0.5) * 0.3,
@@ -335,20 +343,26 @@
       hue: Math.random() < 0.5 ? '209,73,91' : '232,133,61'
     };
   }
+
+  // Animate embers each frame, spawning new ones and dropping ones that faded out
   function tick(){
-    ctx.clearRect(0, 0, w, h);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // cap keeps the canvas from feeling crowded, the chance staggers new embers instead of a burst
     if (embers.length < 34 && Math.random() < 0.35) embers.push(spawn());
-    embers = embers.filter(e => e.life < e.max && e.y > -10);
-    for (const e of embers){
-      e.life++; e.y -= e.vy; e.x += e.vx + Math.sin(e.life / 40) * 0.15;
-      const a = Math.max(0, 0.55 * (1 - e.life / e.max));
+    embers = embers.filter(ember => ember.life < ember.max && ember.y > -10);
+    for (const ember of embers){
+      ember.life++;
+      ember.y -= ember.vy;
+      ember.x += ember.vx + Math.sin(ember.life / 40) * 0.15;
+      const alpha = Math.max(0, 0.55 * (1 - ember.life / ember.max));
       ctx.beginPath();
-      ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + e.hue + ',' + a + ')';
+      ctx.arc(ember.x, ember.y, ember.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + ember.hue + ',' + alpha + ')';
       ctx.fill();
     }
     requestAnimationFrame(tick);
   }
+
   size();
   window.addEventListener('resize', size);
   tick();
