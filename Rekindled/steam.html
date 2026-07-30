@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steam Integration · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.bug-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-top:16px}
+.bug-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.92rem;color:var(--parchment);margin-bottom:8px}
+.bug-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+.bug-card .fix{margin-top:8px;color:var(--smoke);font-size:14px;border-top:1px solid var(--line);padding-top:8px}
+.bug-card .fix strong{color:var(--flame)}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.navlinks{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html">Spell Framework</a>
+      <a href="combination-system.html">Combination</a>
+      <a href="input.html">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html">Performance</a>
+      <a href="steam.html" class="active">Steam</a>
+      <a href="enemy-ai.html">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Steam</div>
+    <div class="eyebrow">Rekindled · Platform Integration</div>
+    <h1>Steam Integration</h1>
+    <p class="detail-sub">Shipped Rekindled on Steam. Integrated Steamworks.NET (a C# wrapper around Valve's Steamworks SDK), fixed three bugs in the boilerplate SteamManager, wired achievement unlocks as a data driven listener, and extended the achievement data structure to bridge the game's internal events to Steam's API.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Integration Setup</div>
+    <p class="sec-intro">Steamworks.NET is a thin C# wrapper around Valve's Steamworks SDK. Getting it running correctly in Unity without going through the Steam client requires a few non-obvious steps.</p>
+    <ul class="bullets">
+      <li><strong>steam_appid.txt</strong> placed at the project root with the game's App ID (<span class="mono">4926530</span>). This lets <span class="mono">SteamAPI.Init()</span> succeed inside the Unity editor without launching through Steam.</li>
+      <li><strong>RestartAppIfNecessary</strong> configured with <span class="mono">new AppId_t(4926530)</span> instead of <span class="mono">AppId_t.Invalid</span> so the running build correctly identifies itself to Steam. Without this, Steam does not recognize the process as the correct app and features like overlay and achievements are silently unavailable.</li>
+      <li><strong>SteamAPI.RunCallbacks()</strong> called every Update frame. Steamworks is callback based; skipping this means no Steam events are ever dispatched.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">SteamManager Bug Fixes</div>
+    <p class="sec-intro">The Steamworks.NET package ships a boilerplate SteamManager.cs. It had three bugs that cause silent failures or exceptions in production.</p>
+
+    <div class="bug-card">
+      <h4>Bug 1: Static state corruption on duplicate Awake</h4>
+      <p>Original code assigned <span class="mono">s_instance = this</span> before the <span class="mono">s_EverInitialized</span> check. If a second SteamManager was instantiated (for example a scene reload with DontDestroyOnLoad), the static instance was overwritten before the duplicate was destroyed, corrupting state.</p>
+      <div class="fix"><strong>Fix:</strong> moved the assignment to after the duplicate check so <span class="mono">s_instance</span> is only set when the object is confirmed to be the first and only instance.</div>
+    </div>
+
+    <div class="bug-card">
+      <h4>Bug 2: Exception on duplicate init instead of graceful destroy</h4>
+      <p>The duplicate detection path threw an exception, crashing the game with a visible error rather than silently destroying the extra instance.</p>
+      <div class="fix"><strong>Fix:</strong> replaced <span class="mono">throw</span> with <span class="mono">Destroy(gameObject); return;</span>. The duplicate is cleaned up quietly and the first instance continues unaffected.</div>
+    </div>
+
+    <div class="bug-card">
+      <h4>Bug 3: Initialized property auto-spawning a new manager</h4>
+      <p>The <span class="mono">Initialized</span> getter read through the <span class="mono">Instance</span> property, which had a lazy spawn side effect. Reading <span class="mono">Initialized</span> on a frame before SteamManager existed in the scene would instantiate a new one mid frame.</p>
+      <div class="fix"><strong>Fix:</strong> rewrote the getter to read <span class="mono">s_instance</span> directly: <span class="mono">return s_instance != null &amp;&amp; s_instance.m_bInitialized;</span>. No side effects.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Achievements</div>
+    <p class="sec-intro">Achievement unlocks are data driven. Adding a new achievement that maps to a Steam API name requires only a data asset change, no code.</p>
+    <ul class="bullets">
+      <li>A <strong>steamApiKey field</strong> was added to the <span class="mono">Achievement</span> struct in <span class="mono">GlobalDefinitions.cs</span>. The field stores the Steam API name exactly as defined on the Steamworks dashboard (e.g., <span class="mono">"ACH_FIRST_BOSS"</span>), bridging the internal achievement object to the Steam API.</li>
+      <li><strong>SteamAchievements.cs</strong> subscribes to <span class="mono">OnAchievementUnlocked</span> via MessagingService. On receive: checks <span class="mono">SteamManager.Initialized</span> and that <span class="mono">achievement.steamApiKey</span> is non-empty before calling <span class="mono">SteamUserStats.SetAchievement()</span>.</li>
+      <li><strong>StoreStats()</strong> is called immediately after SetAchievement. Without StoreStats the unlock is queued locally but never written to Steam's servers. On a crash, the achievement would be lost.</li>
+    </ul>
+    <pre><code><span class="kw">private void</span> HandleAchievementUnlocked(<span class="ty">Achievement</span> achievement)
+{
+    <span class="kw">if</span> (!<span class="ty">SteamManager</span>.Initialized) <span class="kw">return</span>;
+    <span class="kw">if</span> (string.IsNullOrEmpty(achievement.steamApiKey)) <span class="kw">return</span>;
+    <span class="ty">SteamUserStats</span>.SetAchievement(achievement.steamApiKey);
+    <span class="ty">SteamUserStats</span>.StoreStats();
+}</code></pre>
+    <div class="callout">
+      <p><strong>Why check Initialized rather than catching exceptions?</strong> <span class="mono">SteamUserStats</span> calls silently fail and return false when Steam is not initialized, but an unchecked call during editor testing (where Steam may not be running) can leave the Steam overlay in a bad state. An explicit guard makes the behavior predictable in both editor and build.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="performance.html">← Performance</a>
+    <a href="enemy-ai.html">Enemy AI Design →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

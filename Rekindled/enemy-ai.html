@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enemy AI Design · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.state-flow{display:flex;align-items:center;margin-top:22px;flex-wrap:wrap;gap:8px}
+.state{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:10px 16px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--parchment)}
+.state.active{border-color:var(--ember);color:var(--flame)}
+.arrow{color:var(--smoke);font-size:14px;padding:0 4px}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+.intent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}
+.intent-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.intent-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;color:var(--parchment);margin-bottom:8px}
+.intent-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.intent-grid{grid-template-columns:1fr}.navlinks{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html">Spell Framework</a>
+      <a href="combination-system.html">Combination</a>
+      <a href="input.html">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html">Performance</a>
+      <a href="steam.html">Steam</a>
+      <a href="enemy-ai.html" class="active">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Enemy AI</div>
+    <div class="eyebrow">Rekindled · AI Design</div>
+    <h1>Enemy AI Design</h1>
+    <p class="detail-sub">Designed the Gargoyle enemy's four state AI using a lightweight state machine with <strong>weighted random intent selection</strong>, a hide behavior that uses other enemies as cover, and a low health retreat that forces the Gargoyle to stop attacking.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">State Machine</div>
+    <p class="sec-intro">The Gargoyle (a flying bat enemy) runs four states through a SimpleStateMachine (a lightweight state machine utility in the project). All transition predicates are defined as lambda closures in OnEnable so the conditions sit next to the states that use them.</p>
+    <div class="state-flow">
+      <div class="state">Patrol</div>
+      <span class="arrow">→</span>
+      <div class="state active">Chase</div>
+      <span class="arrow">→</span>
+      <div class="state">Attack</div>
+      <span class="arrow">→</span>
+      <div class="state">Hide</div>
+      <span class="arrow">↩</span>
+    </div>
+    <ul class="bullets" style="margin-top:24px">
+      <li><strong>Patrol:</strong> wanders between waypoints. Transitions to Chase when the player enters detection range.</li>
+      <li><strong>Chase:</strong> closes distance to the player using NavMesh pathfinding. Transitions to Attack within strike range or Hide when the intent system evaluates to hide.</li>
+      <li><strong>Attack:</strong> three phase coroutine: charge at the player, telegraph pause, claw activation, then retreat to the preattack position. Circle direction alternates each attack to vary approach angle.</li>
+      <li><strong>Hide:</strong> moves behind a nearby Golem (a large armored enemy) relative to the player's position. When health drops below <span class="mono">hidingLifeThreshold</span>, intent is forced to Hide and attack is suspended.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Weighted Random Intent</div>
+    <p class="sec-intro">The Gargoyle does not always attack when it could. A weighted random intent system reevaluates on an interval so it sometimes prioritizes hiding even when the player is in range, preventing completely predictable behavior.</p>
+    <ul class="bullets">
+      <li>An <strong>EnemyIntentStruct list</strong> in the inspector assigns a weight to each intent (Attack, Hide, Patrol). Higher weight means more likely to be chosen on any given evaluation.</li>
+      <li>Intent is reevaluated every <span class="mono">intentCheckInterval</span> seconds, not every frame. This means the Gargoyle commits to its current behavior for a window before reconsidering.</li>
+      <li>Selection is proportional: the sum of all weights is computed, a random value is drawn in <span class="mono">[0, sum)</span>, and the winning intent is the one whose cumulative weight crosses that value.</li>
+    </ul>
+    <div class="intent-grid">
+      <div class="intent-card">
+        <h4>Normal state: weighted random</h4>
+        <p>All three intents compete normally. The Gargoyle might choose to hide even at full health, making it feel like a thinking enemy rather than a direct charge bot.</p>
+      </div>
+      <div class="intent-card">
+        <h4>Low health: forced hide</h4>
+        <p>When health drops below <span class="mono">hidingLifeThreshold</span>, intent is overridden to Hide every evaluation. The attack coroutine is cancelled and the Gargoyle retreats to cover immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Hide Behavior</div>
+    <p class="sec-intro">The Gargoyle uses the Golem enemy as cover. It specifically moves to a position behind the Golem relative to the player's angle so the Golem's body shields it from the player's line of sight.</p>
+    <ul class="bullets">
+      <li>Every <span class="mono">updateCheckInterval</span> seconds, <span class="mono">OverlapSphereNonAlloc</span> scans for a nearby Golem. If multiple Golems are in range, the closest one is chosen.</li>
+      <li>The hide position is computed by taking the direction from the player to the Golem, extending it by a configurable offset behind the Golem, then calling <span class="mono">NavMesh.SamplePosition</span> to find a valid walkable point at that location.</li>
+      <li>If no Golem is found, the Gargoyle falls back to maximum distance retreat along its current heading.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Why NavMesh.SamplePosition instead of going directly to the computed point?</strong> The geometric hide position may be inside the Golem's collider or off the NavMesh entirely. SamplePosition finds the nearest valid walkable point within a search radius, so the Gargoyle always arrives somewhere navigable.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Attack Sequence</div>
+    <p class="sec-intro">The attack is a three phase coroutine: a charge, a telegraph pause, then the actual hit window. The telegraph gives the player a visible window to react.</p>
+    <ul class="bullets">
+      <li><strong>Phase 1, Charge:</strong> <span class="mono">MoveSpeedMultiplier</span> is boosted and the Gargoyle accelerates toward the player's position. The target position is snapped at charge start so the player can dodge sideways if they react in time.</li>
+      <li><strong>Phase 2, Telegraph:</strong> movement stops for <span class="mono">previewDuration</span> seconds. Duration is configurable so designers can tune difficulty independently of other values.</li>
+      <li><strong>Phase 3, Claw:</strong> the claw trigger collider activates for the hit window then deactivates. After the claw phase, the Gargoyle retreats to its preattack position.</li>
+      <li><strong>Circle direction alternation:</strong> each attack stores whether the Gargoyle circled left or right. The next attack flips it so the Gargoyle approaches from a different angle every other attack.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">BatEnemyMovement</div>
+    <p class="sec-intro">The Gargoyle's passive movement is handled by BatEnemyMovement, a component that runs a sinusoidal wing bob and a polar coordinate orbit around its current target.</p>
+    <ul class="bullets">
+      <li><strong>Wing bob:</strong> increments local Y position each frame and reverses direction at configurable min and max bounds. Speed and amplitude are separate fields so the bob can be tuned independently of flight speed.</li>
+      <li><strong>FMOD wing beat SFX</strong> plays on a timer interval, not tied to animation events, so the sound fires even in states where the animator is not running a wing cycle.</li>
+      <li><strong>CircularMovement</strong> orbits the player target using polar coordinates: the angle offset increments at <span class="mono">orbitSpeed</span> degrees per second each frame, and the world position is set to <span class="mono">target + (sin(angle), 0, cos(angle)) * radius</span>. No NavMesh needed for orbiting.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="steam.html">← Steam Integration</a>
+    <span></span>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

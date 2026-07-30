@@ -85,6 +85,8 @@
   .sys{margin-top:26px;display:flex;flex-wrap:wrap;gap:9px}
   .chip{font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:6px 11px;border:1px solid var(--line);border-radius:4px;color:var(--smoke)}
   .chip.hot{border-color:var(--ember);color:var(--parchment)}
+  a.chip{text-decoration:none;transition:border-color .15s,color .15s,background .15s}
+  a.chip:hover{border-color:var(--flame);color:var(--parchment)}
 
   /* ---------- media placeholder, shared by flagship and project cards ---------- */
   .media{
@@ -188,19 +190,19 @@
             As a phoenix-themed mage, climb a volcanic mountain and revive the last Phoenix to rekindle the world.
         </p>
         <p>
-          <strong>My role:</strong> gameplay programmer. I architected the spell framework all
-          six elemental spells run on, the combination system designers drive through data, interactions between spells, input and
-          rebinding across keyboard and controllers, puzzles and interactables, performance,
-          and Steam integration. I also contributed to enemy AI design.
+          <strong>My role: gameplay programmer.</strong> I owned the architecture end to end
+          the spell framework every ability runs through, the combination system designers drive
+          from data, input across keyboard and three controller types, puzzles and interactables,
+          performance, and Steam integration for launch day. Click any area below for the technical detail.
         </p>
         <div class="sys">
-          <span class="chip hot">Spell framework</span>
-          <span class="chip hot">Combination system</span>
-          <span class="chip">Input &amp; rebinding</span>
-          <span class="chip">Puzzles &amp; interactables</span>
-          <span class="chip">Performance</span>
-          <span class="chip">Steam integration</span>
-          <span class="chip">Enemy AI design</span>
+          <a class="chip hot" href="rekindled/spell-framework.html">Spell framework ↗</a>
+          <a class="chip hot" href="rekindled/combination-system.html">Combination system ↗</a>
+          <a class="chip" href="rekindled/input.html">Input &amp; rebinding ↗</a>
+          <a class="chip" href="rekindled/puzzles.html">Puzzles &amp; interactables ↗</a>
+          <a class="chip" href="rekindled/performance.html">Performance ↗</a>
+          <a class="chip" href="rekindled/steam.html">Steam integration ↗</a>
+          <a class="chip" href="rekindled/enemy-ai.html">Enemy AI design ↗</a>
         </div>
         <div class="cta"><a class="btn primary" href="https://store.steampowered.com/app/4926530/">Wishlist on Steam</a></div>
       </div>

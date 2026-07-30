@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input &amp; Rebinding · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.device-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px}
+.device-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.device-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;margin-bottom:8px;color:var(--parchment)}
+.device-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.device-grid{grid-template-columns:1fr 1fr}.navlinks{display:none}}
+@media(max-width:540px){.device-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html">Spell Framework</a>
+      <a href="combination-system.html">Combination</a>
+      <a href="input.html" class="active">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html">Performance</a>
+      <a href="steam.html">Steam</a>
+      <a href="enemy-ai.html">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Input</div>
+    <div class="eyebrow">Rekindled · Input Engineering</div>
+    <h1>Input &amp; Rebinding</h1>
+    <p class="detail-sub">Built the full input stack: Unity Input System integration across keyboard, Xbox, and PlayStation; live device detection that refreshes every UI prompt instantly; runtime key rebinding that persists to PlayerPrefs; and haptic feedback driven entirely from data.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Device Detection</div>
+    <p class="sec-intro">The game needs to know which device the player is using at all times so every prompt, icon, and behavior matches their controller.</p>
+    <ul class="bullets">
+      <li><strong>InputSchemeDetector</strong> (a static class) subscribes to <span class="mono">OnActionTriggered</span> on every action in the Player action map and reads the <span class="mono">InputDevice</span> type from each callback. When the scheme changes, it fires a static <span class="mono">OnInputSchemeChanged</span> event that all UI components listen to.</li>
+      <li>Three device classes are tracked independently: Keyboard/Mouse, Xbox (XInputController), and PlayStation (DualShock/DualSense). Prompt icons differ between Xbox and PlayStation so both are needed as separate schemes.</li>
+      <li><strong>Gamepad trigger edge case:</strong> on some gamepads, <span class="mono">performed</span> and <span class="mono">canceled</span> fire on the same frame when a trigger is released slowly. A frame count guard on the cast handler prevents ghost spell executions from this hardware quirk.</li>
+      <li>Spells configured as <strong>CastOnPress</strong> fire immediately on button down instead of waiting for release. A separate guard prevents double execution if the action also fires <span class="mono">performed</span> on the same frame.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Live Prompt Refresh</div>
+    <p class="sec-intro">Every UI element that displays a control label updates itself the moment the player switches devices, with no scene reload.</p>
+    <div class="device-grid">
+      <div class="device-card">
+        <h4>InputPromptUI</h4>
+        <p>Subscribes to OnInputSchemeChanged and refreshes all displayed key labels instantly when the device changes.</p>
+      </div>
+      <div class="device-card">
+        <h4>NotificationPanel</h4>
+        <p>Re-renders <span class="mono">{prompt0}</span> placeholders in notification text on scheme change, so tutorial prompts always show the correct button icon.</p>
+      </div>
+      <div class="device-card">
+        <h4>RebindButton</h4>
+        <p>Refreshes its displayed binding label on scheme change, ensuring the rebind menu always shows the relevant control group for the active device.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Runtime Rebinding</div>
+    <p class="sec-intro">Players can remap any action in the pause menu. Bindings persist across sessions and debug actions are excluded from the UI automatically.</p>
+    <ul class="bullets">
+      <li><strong>RebindManager</strong> dynamically generates a row of <span class="mono">RebindButton</span> components from the <span class="mono">InputActionAsset</span> at runtime. No manual list to maintain when new actions are added.</li>
+      <li>Any action named <span class="mono">"Look"</span> and any action starting with <span class="mono">"DEBUG"</span> are skipped during row generation. Debug bindings live in the same action map but never surface in the rebind UI.</li>
+      <li><strong>PerformInteractiveRebinding</strong> targets the binding index for the active control scheme group (Keyboard &amp; Mouse vs Gamepad). During rebind the action is disabled, a "waiting for input" label shows, and the action reenables on complete or cancel.</li>
+      <li>Bindings are saved as JSON overrides in <span class="mono">PlayerPrefs</span> and loaded in Awake so custom bindings are active before the first frame. ResetToDefaults strips all overrides and deletes the key.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Why PlayerPrefs over a file?</strong> Steamworks cloud save syncs PlayerPrefs on supported platforms, so rebinds follow the player across machines without any extra code.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Haptics</div>
+    <p class="sec-intro">Vibration patterns are fully data driven. Adding a new rumble effect for a new game event requires zero code.</p>
+    <ul class="bullets">
+      <li><strong>VibrationManager</strong> disables Update at rest and reenables it only while a vibration is playing. No per frame cost when the gamepad is idle.</li>
+      <li><strong>AnimationCurve profiles</strong> define left and right motor intensity over normalized time. Each VibrationSettings asset is a separate curve pair that designers author in the Inspector.</li>
+      <li><strong>GameHaptics</strong> maps any <span class="mono">GlobalMessages</span> event (the project wide event bus) to a vibration profile via a <span class="mono">List&lt;VibrationMapping&gt;</span> in the Inspector. A static <span class="mono">payloadTypeMap</span> dictionary resolves the generic type needed for <span class="mono">AddListener&lt;T&gt;</span> at runtime without casting.</li>
+      <li>Bool typed events like <span class="mono">OnCombineStateChanged</span> support two profiles per mapping (true and false), so combine enter and combine exit rumble differently.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Sensitivity</div>
+    <p class="sec-intro">Camera sensitivity updates live from the settings slider with no scene reload or settings apply button.</p>
+    <ul class="bullets">
+      <li><strong>SensitivitySlider</strong> persists to <span class="mono">PlayerPrefs</span> on every slider change and broadcasts via <span class="mono">MessagingService.OnSensitivityChanged</span> (the project wide event bus). Initializes from the saved value on OnEnable, defaulting to the slider midpoint if no save exists.</li>
+      <li><strong>AimPivotController</strong> receives <span class="mono">OnSensitivityChanged</span> and applies the multiplier to camera rotation immediately. The player can drag the slider and see the camera respond in real time.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="combination-system.html">← Combination System</a>
+    <a href="puzzles.html">Puzzles &amp; Interactables →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

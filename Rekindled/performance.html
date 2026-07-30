@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.perf-row{display:grid;grid-template-columns:1fr 2fr;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:22px}
+.perf-row + .perf-row{margin-top:12px}
+.perf-label{background:var(--char);padding:16px 20px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--flame);display:flex;align-items:center}
+.perf-body{padding:16px 20px;font-size:15px;color:var(--smoke);line-height:1.6;border-left:1px solid var(--line)}
+.perf-body strong{color:var(--parchment)}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:700px){.perf-row{grid-template-columns:1fr}.perf-label{border-bottom:1px solid var(--line)}.perf-body{border-left:none}.navlinks{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html">Spell Framework</a>
+      <a href="combination-system.html">Combination</a>
+      <a href="input.html">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html" class="active">Performance</a>
+      <a href="steam.html">Steam</a>
+      <a href="enemy-ai.html">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Performance</div>
+    <div class="eyebrow">Rekindled · Optimization</div>
+    <h1>Performance</h1>
+    <p class="detail-sub">Cut allocation hotspots throughout the spell and physics systems: preallocated buffers, object pools, frame throttled queries, and a VFX GPU readback workaround that prevents effects from being recycled before they finish.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Zero Allocation Spell Raycasts</div>
+    <p class="sec-intro">The spell indicator (the decal showing where a zone spell will land) updates every frame while the player aims. Without care that is a physics query allocating a new array each tick, multiplied by every active spell behavior.</p>
+    <ul class="bullets">
+      <li>A <strong>RaycastHit[5] field</strong> on SpellBehavior (the base class all spells inherit from) is allocated once at construction. <span class="mono">Physics.RaycastNonAlloc</span> fills it in place with no heap traffic per frame.</li>
+      <li>A <strong>Collider[8] field</strong> on AimPivotController (the component that owns camera aim and target lock) serves the lock on overlap sphere. Same pattern: allocated once, reused every search.</li>
+      <li>A <strong>Collider[10] field</strong> on Torch serves the Scorched Earth proximity check. Shared across all three lighting modes so there is a single buffer per torch regardless of which mode fires.</li>
+    </ul>
+
+    <div class="perf-row">
+      <div class="perf-label">Before</div>
+      <div class="perf-body"><strong>RaycastHit[] allocated every frame</strong> inside the aim point loop. 60fps = 60 arrays per second per active spell behavior.</div>
+    </div>
+    <div class="perf-row">
+      <div class="perf-label">After</div>
+      <div class="perf-body"><strong>RaycastNonAlloc with a preallocated RaycastHit[5]</strong> field. Zero heap allocation in steady state. GC pressure from spell raycasts: eliminated.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Lock On Query Throttle</div>
+    <p class="sec-intro">The lock on system runs an OverlapSphere every frame to find valid targets in range. In enemy dense areas that is expensive, and the lock target changes slowly enough that it does not need to run every frame.</p>
+    <ul class="bullets">
+      <li><strong>LockSearchInterval = 3:</strong> the search only runs every third frame. The locked target is held between searches. There is no perceptible lag at 60fps, and the physics query cost drops by two thirds in dense areas.</li>
+      <li>The throttle counter increments in LateUpdate. A spell switch resets it immediately so the first search after switching always runs on the next frame.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Projectile Pooling</div>
+    <p class="sec-intro">Homing Feather fires up to 8 projectiles per cast. Without pooling each cast Instantiates 8 objects and destroys them on impact, causing GC spikes on every attack.</p>
+    <ul class="bullets">
+      <li><strong>ObjectPool&lt;HomingProjectile&gt;</strong> in HomingSpellBehavior. Default capacity 4, max size 8. Get from pool sets the projectile active and positions it; return to pool deactivates and zeroes velocity.</li>
+      <li>Pool warmup happens at spell Initialize, not at first cast, so the first feather volley never triggers an allocation spike mid combat.</li>
+      <li>FireSpitter traps use the same <span class="mono">ObjectPool&lt;DamageOnTrigger&gt;</span> pattern. A closure captures the return to pool callback and cancels the lifetime coroutine if the projectile hits early, so the pool is always returned exactly once per projectile.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">VFX Graph GPU Readback Bug</div>
+    <p class="sec-intro">Unity's VFX Graph (the node based particle system used in Rekindled) reports particle counts via async GPU readback, which takes a few frames to settle. Before it settles, <span class="mono">aliveParticleCount</span> returns a large negative integer, not zero.</p>
+    <ul class="bullets">
+      <li><strong>The bug:</strong> VFX completion checks used <span class="mono">aliveParticleCount == 0</span>. Before readback settled the count was negative and never equalled zero, so effects ran indefinitely or never autocompleted.</li>
+      <li><strong>The fix:</strong> changed all completion guards from <span class="mono">== 0</span> to <span class="mono">&lt;= 0</span>. Negative garbage values before readback settles are treated as done. Once the GPU readback stabilizes, the real count of 0 also satisfies the guard.</li>
+      <li><strong>Pooled VFX init sequence:</strong> on retrieval from pool, both <span class="mono">Reinit()</span> and <span class="mono">Play()</span> must be called. <span class="mono">Reinit()</span> alone is silent if the VFX asset's initial event is not set to <span class="mono">"OnPlay"</span>, causing the effect to visually reset but never start emitting.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Why does aliveParticleCount go negative?</strong> The VFX Graph reads particle counts from the GPU via async readback. The CPU sees a stale value from the previous readback until the GPU finishes. Unity's internal representation of "no data yet" produces large negative integers in some driver configurations.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">FireSpitterGroup: Offscreen Culling</div>
+    <p class="sec-intro">Fire spitter traps should only run their spawn loops when the player is nearby. Running them offscreen wastes CPU and pool budget on projectiles the player will never see.</p>
+    <ul class="bullets">
+      <li><strong>FireSpitterGroup</strong> does an <span class="mono">OverlapSphere</span> check each frame against the player's position. If the player is beyond <span class="mono">activationRadius</span>, all child spitters stop their <span class="mono">InvokeRepeating</span> shoot loops and return inflight projectiles to the pool.</li>
+      <li>A <strong>state change guard</strong> ensures StartShooting and StopShooting only fire once on transition. Without it the guard condition triggers continuous calls every frame the player is out of range.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="puzzles.html">← Puzzles &amp; Interactables</a>
+    <a href="steam.html">Steam Integration →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

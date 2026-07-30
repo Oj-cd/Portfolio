@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combination System · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.combo-table{width:100%;border-collapse:collapse;margin-top:22px;font-size:15px}
+.combo-table th{text-align:left;padding:10px 14px;background:var(--char);color:var(--smoke);font-weight:500;font-size:13px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.combo-table td{padding:11px 14px;border-bottom:1px solid var(--line);color:var(--smoke);vertical-align:top}
+.combo-table td:first-child{color:var(--parchment);font-family:"IBM Plex Mono",monospace;font-size:13.5px;white-space:nowrap}
+.combo-table tr:last-child td{border-bottom:none}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.navlinks{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html">Spell Framework</a>
+      <a href="combination-system.html" class="active">Combination</a>
+      <a href="input.html">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html">Performance</a>
+      <a href="steam.html">Steam</a>
+      <a href="enemy-ai.html">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Combination System</div>
+    <div class="eyebrow">Rekindled · Designer Driven Data</div>
+    <h1>Combination System</h1>
+    <p class="detail-sub">Built the elemental combination system designers author entirely from a ScriptableObject with no code changes needed to add new combos. A commutative dictionary lookup, time dilation, and mana rollback make the mechanic feel solid under the hood.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Lookup Design</div>
+    <p class="sec-intro">Two elements in, one combo spell out. The lookup makes (A, B) and (B, A) equivalent so players do not need to care which element they selected first.</p>
+    <ul class="bullets">
+      <li><strong>NormalizeKey</strong> sorts the two element enum values before hashing so (Fire, Ash) and (Ash, Fire) always map to the same tuple key.</li>
+      <li><strong>BuildLookup</strong> runs at Awake and populates a <span class="mono">Dictionary&lt;(Elements, Elements), SpellData&gt;</span> from a <span class="mono">SpellRegistry</span> ScriptableObject (a Unity asset that holds the combo definitions). Adding a new combo is entirely designer driven: drag a SpellData asset into the registry, pick two elements, no code.</li>
+      <li><strong>Combine.TryCombine</strong> returns a <span class="mono">SpellData</span> or null in a single dictionary lookup, feeding the result directly back into the spell creation pipeline.</li>
+    </ul>
+    <pre><code><span class="cm">// makes (A,B) and (B,A) hash to the same key</span>
+<span class="kw">private</span> (<span class="ty">Elements</span>, <span class="ty">Elements</span>) NormalizeKey(<span class="ty">Elements</span> a, <span class="ty">Elements</span> b)
+    => a &lt;= b ? (a, b) : (b, a);
+
+<span class="kw">public bool</span> TryCombine(<span class="ty">Elements</span> a, <span class="ty">Elements</span> b, <span class="kw">out</span> <span class="ty">SpellData</span> result)
+    => lookup.TryGetValue(NormalizeKey(a, b), <span class="kw">out</span> result);</code></pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Time Dilation and Mana</div>
+    <p class="sec-intro">Entering combine mode slows time so the player can choose calmly. Mana should not regenerate during that pause, and a cancelled selection should cost nothing.</p>
+    <ul class="bullets">
+      <li><strong>Time dilation</strong> is applied with <span class="mono">Time.timeScale = combineTimeScale</span> on combine entry and restored to 1 on exit or spell selection.</li>
+      <li><strong>Mana regen suppression</strong> sets <span class="mono">combineManaRegenMultiplier = 0</span> while in combine mode so the slowdown does not grant free regen.</li>
+      <li><strong>Cast rollback</strong> accumulates <span class="mono">manaPaidDuringCast</span> during a charge and fully refunds it on cancel. Cancelling a half charged combo spell costs nothing.</li>
+      <li><strong>Incremental deduction</strong> for multi projectile spells: the <span class="mono">TryDeductMana</span> delegate is passed into the behavior so each feather deducts independently at spawn. The player is never charged for feathers that never fired.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Why not charge the full mana cost upfront?</strong> Spells like Homing Feather can be cancelled mid cast. Charging upfront and refunding on cancel creates a visible mana flicker. Incremental deduction via delegate means only feathers that actually launched cost mana.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Combo Spells</div>
+    <p class="sec-intro">Each combination produces a spell that neither source element has alone. The system ships with four combinations defined in the registry.</p>
+    <table class="combo-table">
+      <thead>
+        <tr><th>Elements</th><th>Result</th><th>Effect</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Fire + Ash</td>
+          <td>Scorched Earth (enhanced)</td>
+          <td>Larger zone radius and extended burn duration compared to the base spell.</td>
+        </tr>
+        <tr>
+          <td>Fire + Wind</td>
+          <td>Flame Shot (enhanced)</td>
+          <td>Projectile speed and damage boosted; ignition status applied on hit.</td>
+        </tr>
+        <tr>
+          <td>Ash + Wind</td>
+          <td>Plume Cloud (enhanced)</td>
+          <td>Cloud lingers longer and covers a wider area, increasing zone control.</td>
+        </tr>
+        <tr>
+          <td>Fire + Life</td>
+          <td>Rebirth (enhanced)</td>
+          <td>Healing output increased; faster cast time on the charge variant.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Stats Tracking</div>
+    <p class="sec-intro">Every combine mode entry and per spell cast count is logged to PlayerProgressManager (the persistent save object) for the win screen summary.</p>
+    <ul class="bullets">
+      <li>An <strong>OnSpellCreated event</strong> fires whenever a spell is successfully combined. The win screen reads total combine entries from this counter.</li>
+      <li>Per spell cast counters increment each time OnExecute returns true. The win screen displays each spell's name and how many times it was cast across the entire run.</li>
+      <li><strong>PlayerCharacter</strong> (the central player MonoBehaviour) subscribes to <span class="mono">Combine.OnSpellCreated</span> to trigger the element select animation through the animator, so the character visually reacts in the same frame the combo resolves.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="spell-framework.html">← Spell Framework</a>
+    <a href="input.html">Input &amp; Rebinding →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

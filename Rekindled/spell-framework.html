@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spell Framework · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.spell-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px}
+.spell-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.spell-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.95rem;margin-bottom:8px}
+.spell-card h4 em{font-style:normal;color:var(--ember);margin-right:5px}
+.spell-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.spell-grid{grid-template-columns:1fr 1fr}.navlinks{display:none}}
+@media(max-width:540px){.spell-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="spell-framework.html" class="active">Spell Framework</a>
+      <a href="combination-system.html">Combination</a>
+      <a href="input.html">Input</a>
+      <a href="puzzles.html">Puzzles</a>
+      <a href="performance.html">Performance</a>
+      <a href="steam.html">Steam</a>
+      <a href="enemy-ai.html">Enemy AI</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#rekindled">Rekindled</a> / Spell Framework</div>
+    <div class="eyebrow">Rekindled · Systems Architecture</div>
+    <h1>Spell Framework</h1>
+    <p class="detail-sub">Architected <strong>SpellBehavior</strong>, the abstract C# base class all six elemental spells inherit from. A five phase lifecycle shared across every ability, with zero per cast heap allocation and built in ground detection that handles slopes, walls, and obstacles.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Lifecycle and Caching</div>
+    <p class="sec-intro">Six spells with different behavior need to share ground detection, indicator display, and cast state without duplicating any of it.</p>
+    <ul class="bullets">
+      <li><strong>SpellBehavior</strong> is an abstract C# class exposing five override points: Initialize, OnBeginCast, OnUpdateCast, OnExecute, and OnCancel. Every spell implements only the phases it needs.</li>
+      <li><strong>SpellHandler</strong> (the MonoBehaviour that owns spell execution on the player) caches one SpellBehavior instance per spell in a <span class="mono">Dictionary&lt;string, SpellBehavior&gt;</span> built at startup. Switching spells never allocates. The cached instance is activated and reset in place.</li>
+      <li>A <strong>pendingClear flag</strong> defers SpellHandler.Clear() to LateUpdate. Without it, a cast resolving in Update could fire OnExecute while the behavior clears its state on the same frame.</li>
+    </ul>
+    <pre><code><span class="cm">// five phases, subclasses override only what they need</span>
+<span class="kw">public virtual void</span> Initialize(<span class="ty">SpellData</span> data) { }
+<span class="kw">public virtual void</span> OnBeginCast(<span class="ty">SpellHandler</span> caster) { }
+<span class="kw">public virtual void</span> OnUpdateCast(<span class="ty">SpellHandler</span> caster) { }
+<span class="kw">public virtual bool</span> OnExecute(<span class="ty">SpellHandler</span> caster) { }
+<span class="kw">public virtual void</span> OnCancel() { }</code></pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Ground Detection</div>
+    <p class="sec-intro">Zone spells need to know where the player is aiming in world space: on slopes, near walls, without heap allocation every frame.</p>
+    <ul class="bullets">
+      <li>A <strong>RaycastHit[5] array</strong> is stored as a field on SpellBehavior, allocated once at construction. <span class="mono">Physics.RaycastNonAlloc</span> fills it each frame with no heap allocation.</li>
+      <li>A <strong>best Y scoring loop</strong> selects the hit whose Y coordinate is closest to the player's feet, correctly prioritizing the floor when the ray also intersects an overhead ledge or wall.</li>
+      <li><strong>ClampBehindObstacles</strong> fires a secondary ray from the player's waist toward the aimed ground point. If a solid obstacle is hit, the indicator snaps to just in front of it, keeping spells from clipping through walls.</li>
+      <li>If the aim ray hits nothing at all, a downward snap ray is cast from the flat forward max range point so the indicator never disappears when the player aims over a gap.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">The Six Spells</div>
+    <p class="sec-intro">Each spell subclass overrides only the phases it needs. Shared behavior like indicator placement and obstacle clamping runs automatically from SpellBehavior.</p>
+    <div class="spell-grid">
+      <div class="spell-card">
+        <h4><em>01</em> Homing Feather</h4>
+        <p>Up to 8 pooled projectiles launched in a circular arc. Each feather has a phase offset staggering its bounce timing. Mana is deducted per feather at spawn time via delegate so the full cost is never charged upfront.</p>
+      </div>
+      <div class="spell-card">
+        <h4><em>02</em> Dash</h4>
+        <p>Three phase coroutine: startup, flight, recovery. A zero friction physics material during flight prevents catching on geometry edges. Camera damping lerps up during dash and back on recovery for a momentum feel.</p>
+      </div>
+      <div class="spell-card">
+        <h4><em>03</em> Scorched Earth</h4>
+        <p>Zone spell with a slope aligned indicator. The DamageZone it places triggers a kinematic elevator beneath it, letting the player use the spell as a platform to reach higher ground.</p>
+      </div>
+      <div class="spell-card">
+        <h4><em>04</em> Ash Pillar</h4>
+        <p>Zone spell that summons a pillar at the aimed ground point. Pooled pillar objects rising from below are guarded against a KillZone trigger at the level base that would destroy them before they surface.</p>
+      </div>
+      <div class="spell-card">
+        <h4><em>05</em> Flame Shot</h4>
+        <p>Direct fire projectile that executes immediately with no ground projection phase. Aim direction is computed from AimPivot (a shoulder mounted transform that drives camera and targeting) to the first ray hit.</p>
+      </div>
+      <div class="spell-card">
+        <h4><em>06</em> Plume Cloud</h4>
+        <p>Area denial projectile that spawns a persistent cloud on impact. Used alongside other spells to trigger elemental interactions on contact.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Per Spell Target Lock</div>
+    <p class="sec-intro">Each spell configures the lock on system independently: range, cone width, on/off state. Fast spells and zone spells behave differently without any conditional logic inside the lock system.</p>
+    <ul class="bullets">
+      <li><strong>AimPivotController</strong> (the component on the shoulder transform that owns camera aim and target lock) exposes SetActiveLockRange, SetLockOnEnabled, and SetActiveConeAngle. The Crosshair component calls all three when a spell is created or switched.</li>
+      <li>The cone check uses <strong>ClosestPoint</strong> on the collider surface rather than the center. Large enemies like the Golem register a lock as soon as the crosshair cone overlaps any part of their body, not just their pivot.</li>
+      <li>SetActiveLockRange is called with the spell's effective reach, so lock range always matches spell range and never extends farther than the spell can land.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Why not a single global lock range?</strong> Zone spells like Scorched Earth have a wider placement range than a direct projectile like Flame Shot. Tying lock range to spell range means players never lock onto an enemy they cannot actually hit with the selected spell.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <span></span>
+    <a href="combination-system.html">Combination System →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>
