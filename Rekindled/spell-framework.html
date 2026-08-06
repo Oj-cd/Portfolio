@@ -126,8 +126,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
     <div class="spell-grid">
       <div class="spell-card">
         <div class="spell-video">
-          <video controls muted playsinline>
-            <source src="Videos\SpellFramework/homing-feather.mp4" type="video/mp4">
+          <video autoplay loop muted playsinline>
+            <source src="../Videos/SpellFramework/homing-feather.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>01</em> Homing Feather</h4>
@@ -135,8 +135,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       </div>
       <div class="spell-card">
         <div class="spell-video">
-          <video controls muted playsinline>
-            <source src="Videos/SpellFramework/dash.mp4" type="video/mp4">
+          <video autoplay loop muted playsinline>
+            <source src="../Videos/SpellFramework/dash.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>02</em> Dash</h4>
@@ -145,7 +145,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <div class="spell-card">
         <div class="spell-video">
           <video autoplay loop muted playsinline>
-            <source src="Videos/SpellFramework/scorched-earth.mp4" type="video/mp4">
+            <source src="../Videos/SpellFramework/scorched-earth.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>03</em> Scorched Earth</h4>
@@ -154,7 +154,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <div class="spell-card">
         <div class="spell-video">
           <video autoplay loop muted playsinline>
-            <source src="Videos/SpellFramework/ash-pillar.mp4" type="video/mp4">
+            <source src="../Videos/SpellFramework/ash-pillar.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>04</em> Ash Pillar</h4>
@@ -163,7 +163,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <div class="spell-card">
         <div class="spell-video">
           <video autoplay loop muted playsinline>
-            <source src="Videos/SpellFramework/flame-shot.mp4" type="video/mp4">
+            <source src="../Videos/SpellFramework/flame-shot.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>05</em> Flame Shot</h4>
@@ -172,7 +172,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <div class="spell-card">
         <div class="spell-video">
           <video autoplay loop muted playsinline>
-            <source src="Videos/SpellFramework/plume-cloud.mp4" type="video/mp4">
+            <source src="../Videos/SpellFramework/plume-cloud.mp4" type="video/mp4">
           </video>
         </div>
         <h4><em>06</em> Plume Cloud</h4>
@@ -192,7 +192,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <li>SetActiveLockRange is called with the spell's effective reach, so lock range always matches spell range and never extends farther than the spell can land.</li>
     </ul>
     <div class="callout">
-      <p><strong>Why not a single global lock range?</strong> Zone spells like Scorched Earth have a wider placement range than a direct projectile like Flame Shot. Tying lock range to spell range means players never lock onto an enemy they cannot actually hit with the selected spell.</p>
+      <p><strong>Why is there no indicator for target lock?</strong> I initially had a visual for it but decided to remove it because I found more value in helping the player without them noticing</p>
     </div>
   </div>
 </section>
