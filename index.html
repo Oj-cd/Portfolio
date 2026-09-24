@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jerry Olaojo · Gameplay Programmer</title>
-<meta name="description" content="Jerry Olaojo is a gameplay programmer building combat and gameplay systems in Unity and Unreal Engine 5. Gameplay programmer on Rekindled, launching on Steam.">
+<meta name="description" content="Jerry Olaojo is a gameplay programmer building combat and gameplay systems in Unity and Unreal Engine 5. Gameplay programmer on Rekindled, released on Steam.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -166,7 +166,7 @@
     <h1>I write the code <em>players experience.</em></h1>
     <p class="herosub">
       On <strong>Rekindled</strong>, a spell combat game
-      launching on Steam in August 2026, every gameplay system runs through code I built
+      released on Steam in August 2026, every gameplay system runs through code I built
       with a team of six at Vancouver Film School.
     </p>
     <div class="cta">
@@ -183,7 +183,7 @@
     <div class="flagship">
       <div>
         <div class="gametitle">Rekindled</div>
-        <div class="gamestatus">LAUNCHING ON STEAM · AUGUST 2026</div>
+        <div class="gamestatus">OUT NOW ON STEAM</div>
         <p>
             A 2D character spell-weaving action-adventure in a fully 3D world where players combine three core elements into unique spells 
             that interact with each other, creating dynamic combat and puzzle-solving opportunities.
@@ -226,10 +226,12 @@
         <span class="role">SOLO · UNREAL ENGINE 5 · C++</span>
         <h3>Swarm Boss Prototype</h3>
         <p>
-          A boss made of hundreds of units flocking as one creature. Built alone in C++ using
-          BOIDS rules driven by a four state machine (Idle, Rush, Regroup, Orbit), with two pass
-          updates and instanced rendering holding frame cost steady as the swarm grows.
+          A boss that is not one creature but a hundred of them moving as one. Built alone in C++
+          using BOIDS steering under a four state machine (Idle, Rush, Regroup, Orbit). Flocking runs
+          as two passes per tick so every unit steers against the same snapshot, and the whole swarm
+          draws in a single call through one instanced mesh component.
         </p>
+        <div class="cta"><a class="btn" href="https://github.com/Oj-cd/ue5-swarm-boss">Read the source ↗</a></div>
         <video controls muted playsinline
             style="width:100%;aspect-ratio:16/9;border-radius:10px;background:#000">
             <source src="Videos/SwarmBoss/swarm-boss-gameplay.mp4" type="video/mp4">
@@ -304,7 +306,7 @@
 
 <section id="contact" class="contact">
   <div class="wrap">
-    <h2 class="big">Want to buiild experiences players will <em>remember?</em></h2>
+    <h2 class="big">Want to build experiences players will <em>remember?</em></h2>
     <p>I'm looking for a team where I can own gameplay or AI systems and keep learning from
     experienced programmers. Game Design diploma, Vancouver Film School, August 2026.</p>
     <div class="cta">
