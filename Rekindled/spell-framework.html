@@ -48,6 +48,8 @@ section{padding:52px 0;border-bottom:1px solid var(--line)}
 .callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
 .callout p strong{color:var(--parchment)}
 pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+.srcpath{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--smoke);background:var(--char);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;padding:9px 20px;margin-top:22px;letter-spacing:.02em}
+.srcpath + pre{margin-top:0;border-radius:0 0 6px 6px}
 code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
 .kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
 .page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
@@ -97,12 +99,26 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <li><strong>SpellHandler</strong> (the MonoBehaviour that owns spell execution on the player) caches one SpellBehavior instance per spell in a <span class="mono">Dictionary&lt;string, SpellBehavior&gt;</span> built at startup. Switching spells never allocates. The cached instance is activated and reset in place.</li>
       <li>A <strong>pendingClear flag</strong> defers SpellHandler.Clear() to LateUpdate. Without it, a cast resolving in Update could fire OnExecute while the behavior clears its state on the same frame.</li>
     </ul>
-    <pre><code><span class="cm">// five phases, subclasses override only what they need</span>
-<span class="kw">public virtual void</span> Initialize(<span class="ty">SpellData</span> data) { }
-<span class="kw">public virtual void</span> OnBeginCast(<span class="ty">SpellHandler</span> caster) { }
-<span class="kw">public virtual void</span> OnUpdateCast(<span class="ty">SpellHandler</span> caster) { }
-<span class="kw">public virtual bool</span> OnExecute(<span class="ty">SpellHandler</span> caster) { }
-<span class="kw">public virtual void</span> OnCancel() { }</code></pre>
+    <div class="srcpath">Assets/Rekindled/Scripts/Systems/SpellSystem/SpellBehavior.cs</div>
+<pre><code><span class="kw">public abstract class</span> <span class="ty">SpellBehavior</span> : <span class="ty">MonoBehaviour</span>
+{
+    <span class="cm">// assigned by PlayerCharacter before BeginCast; return false to reject and stop incremental spawning</span>
+    <span class="kw">public</span> System.<span class="ty">Func</span>&lt;<span class="kw">float</span>, <span class="kw">bool</span>&gt; TryDeductMana;
+
+    <span class="kw">public virtual void</span> Initialize(<span class="ty">SpellData</span> spellData) { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// runs once when the player presses the cast button</span>
+    <span class="kw">public virtual void</span> OnBeginCast(<span class="ty">SpellHandler</span> caster) { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// runs every frame while the player holds the cast button</span>
+    <span class="kw">public virtual void</span> OnUpdateCast(<span class="ty">SpellHandler</span> caster) { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// runs when the player lets go, this is where the spell actually does its thing</span>
+    <span class="kw">public virtual bool</span> OnExecute(<span class="ty">SpellHandler</span> caster) { <span class="cm">/* ... */</span> }
+
+    <span class="cm">// runs if the player cancels before releasing and clean up any preview objects</span>
+    <span class="kw">public virtual void</span> OnCancel() { <span class="cm">/* ... */</span> }
+}</code></pre>
   </div>
 </section>
 

@@ -46,6 +46,8 @@ section{padding:52px 0;border-bottom:1px solid var(--line)}
 .callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
 .callout p strong{color:var(--parchment)}
 pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+.srcpath{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--smoke);background:var(--char);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;padding:9px 20px;margin-top:22px;letter-spacing:.02em}
+.srcpath + pre{margin-top:0;border-radius:0 0 6px 6px}
 code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
 .kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
 .page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
@@ -94,12 +96,29 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <li><strong>BuildLookup</strong> runs at Awake and populates a <span class="mono">Dictionary&lt;(Elements, Elements), SpellData&gt;</span> from a <span class="mono">SpellRegistry</span> ScriptableObject (a Unity asset that holds the combo definitions). Adding a new combo is entirely designer driven: drag a SpellData asset into the registry, pick two elements, no code.</li>
       <li><strong>Combine.TryCombine</strong> returns a <span class="mono">SpellData</span> or null in a single dictionary lookup, feeding the result directly back into the spell creation pipeline.</li>
     </ul>
-    <pre><code><span class="cm">// makes (A,B) and (B,A) hash to the same key</span>
-<span class="kw">private</span> (<span class="ty">Elements</span>, <span class="ty">Elements</span>) NormalizeKey(<span class="ty">Elements</span> a, <span class="ty">Elements</span> b)
-    => a &lt;= b ? (a, b) : (b, a);
+    <div class="srcpath">Assets/Rekindled/Scripts/Systems/SpellSystem/Combine.cs</div>
+<pre><code><span class="kw">private void</span> BuildLookup()
+{
+    spellLookup = <span class="kw">new</span> <span class="ty">Dictionary</span>&lt;(<span class="ty">Elements</span>, <span class="ty">Elements</span>), <span class="ty">SpellData</span>&gt;();
+    <span class="kw">if</span> (spellRegistry == <span class="kw">null</span>) <span class="kw">return</span>;
 
-<span class="kw">public bool</span> TryCombine(<span class="ty">Elements</span> a, <span class="ty">Elements</span> b, <span class="kw">out</span> <span class="ty">SpellData</span> result)
-    => lookup.TryGetValue(NormalizeKey(a, b), <span class="kw">out</span> result);</code></pre>
+    <span class="kw">foreach</span> (<span class="ty">SpellEntry</span> entry <span class="kw">in</span> spellRegistry.Spells)
+    {
+        (<span class="ty">Elements</span>, <span class="ty">Elements</span>) key = NormalizeKey(entry.Data.FirstElement, entry.Data.SecondElement);
+        <span class="kw">if</span> (!spellLookup.ContainsKey(key))
+            spellLookup[key] = entry.Data;
+    }
+}
+
+<span class="cm">// Normalize the key to ensure (A, B) and (B, A) are treated the same since element order doesn't matter for combination.</span>
+<span class="kw">private</span> (<span class="ty">Elements</span>, <span class="ty">Elements</span>) NormalizeKey(<span class="ty">Elements</span> a, <span class="ty">Elements</span> b)
+{
+    <span class="kw">if</span> (a &lt;= b)
+    {
+        <span class="kw">return</span> (a, b);
+    }
+    <span class="kw">return</span> (b, a);
+}</code></pre>
   </div>
 </section>
 

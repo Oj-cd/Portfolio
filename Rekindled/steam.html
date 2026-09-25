@@ -46,6 +46,8 @@ section{padding:52px 0;border-bottom:1px solid var(--line)}
 .callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
 .callout p strong{color:var(--parchment)}
 pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+.srcpath{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--smoke);background:var(--char);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;padding:9px 20px;margin-top:22px;letter-spacing:.02em}
+.srcpath + pre{margin-top:0;border-radius:0 0 6px 6px}
 code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
 .kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
 .page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
@@ -131,10 +133,22 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
       <li><strong>SteamAchievements.cs</strong> subscribes to <span class="mono">OnAchievementUnlocked</span> via MessagingService. On receive: checks <span class="mono">SteamManager.Initialized</span> and that <span class="mono">achievement.steamApiKey</span> is non-empty before calling <span class="mono">SteamUserStats.SetAchievement()</span>.</li>
       <li><strong>StoreStats()</strong> is called immediately after SetAchievement. Without StoreStats the unlock is queued locally but never written to Steam's servers. On a crash, the achievement would be lost.</li>
     </ul>
-    <pre><code><span class="kw">private void</span> HandleAchievementUnlocked(<span class="ty">Achievement</span> achievement)
+    <div class="srcpath">Assets/Rekindled/Scripts/Steam/SteamAchievements.cs</div>
+<pre><code><span class="kw">private void</span> OnEnable()
+{
+    <span class="ty">MessagingService</span>.Instance.AddListener&lt;<span class="ty">Achievement</span>&gt;(<span class="ty">GlobalMessages</span>.OnAchievementUnlocked, OnAchievementUnlocked);
+}
+
+<span class="kw">private void</span> OnDisable()
+{
+    <span class="ty">MessagingService</span>.Instance.RemoveListener&lt;<span class="ty">Achievement</span>&gt;(<span class="ty">GlobalMessages</span>.OnAchievementUnlocked, OnAchievementUnlocked);
+}
+
+<span class="kw">private void</span> OnAchievementUnlocked(<span class="ty">Achievement</span> achievement)
 {
     <span class="kw">if</span> (!<span class="ty">SteamManager</span>.Initialized) <span class="kw">return</span>;
-    <span class="kw">if</span> (string.IsNullOrEmpty(achievement.steamApiKey)) <span class="kw">return</span>;
+    <span class="kw">if</span> (<span class="ty">String</span>.IsNullOrEmpty(achievement.steamApiKey)) <span class="kw">return</span>;
+
     <span class="ty">SteamUserStats</span>.SetAchievement(achievement.steamApiKey);
     <span class="ty">SteamUserStats</span>.StoreStats();
 }</code></pre>
