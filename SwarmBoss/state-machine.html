@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swarm State Machine · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.bug-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-top:16px}
+.bug-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.92rem;color:var(--parchment);margin-bottom:8px}
+.bug-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+.bug-card .fix{margin-top:8px;color:var(--smoke);font-size:14px;border-top:1px solid var(--line);padding-top:8px}
+.bug-card .fix strong{color:var(--flame)}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+.srcpath{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--smoke);background:var(--char);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;padding:9px 20px;margin-top:22px;letter-spacing:.02em}
+.srcpath + pre{margin-top:0;border-radius:0 0 6px 6px}
+.srcpath a{color:inherit;text-decoration:none}.srcpath a:hover{color:var(--parchment)}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.navlinks{display:none}}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="flocking.html">Flocking</a>
+      <a href="state-machine.html" class="active">State Machine</a>
+      <a href="damage.html">Damage</a>
+      <a href="https://github.com/Oj-cd/ue5-swarm-boss">Source ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#projects">Swarm Boss</a> / State Machine</div>
+    <div class="eyebrow">Swarm Boss · Unreal Engine 5 · C++</div>
+    <h1>Four-State Boss Behavior</h1>
+    <p class="detail-sub">The swarm cycles through <strong>Idle, Rush, Regroup and Orbit</strong>. No state moves a unit directly. Each one only decides <strong>where the flock should want to go</strong>, and the Boids pass does the rest.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">The Cycle</div>
+    <p class="sec-intro">Every state has a steering target and an exit condition. All durations and distances are <span class="mono">EditAnywhere</span> under <span class="mono">Swarm|States</span>, so the fight is paced in the details panel rather than recompiled.</p>
+    <ul class="bullets">
+      <li><strong>Idle:</strong> hovers around the core. Exits after <span class="mono">IdleDuration</span>, or early if the player comes within <span class="mono">RushTriggerDistance</span>.</li>
+      <li><strong>Rush:</strong> steers straight at the player and fires a camera shake on entry. Exits after <span class="mono">RushDuration</span>.</li>
+      <li><strong>Regroup:</strong> snaps back to the core with cohesion and max speed temporarily raised. Exits after <span class="mono">RegroupDuration</span>.</li>
+      <li><strong>Orbit:</strong> circles the player at <span class="mono">OrbitRadius</span>, then loops back to Rush.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">States Only Set a Target</div>
+    <p class="sec-intro">Each state writes one value, <span class="mono">CohesionTarget</span>, and the <a href="flocking.html">flocking pass</a> pulls every unit toward it. Movement lives in exactly one place, so a new state is a few lines rather than a new movement path.</p>
+    <div class="srcpath"><a href="https://github.com/Oj-cd/ue5-swarm-boss/blob/main/Source/LDP/Private/SwarmManager.cpp">Source/LDP/Private/SwarmManager.cpp ↗</a></div>
+<pre><code><span class="kw">void</span> <span class="ty">ASwarmManager</span>::UpdateStateMachine(<span class="kw">float</span> DeltaTime)
+{
+    StateTimer += DeltaTime;
+
+    <span class="cm">// if the player gets too close during idle, rush immediately</span>
+    <span class="kw">if</span> (CurrentState == <span class="ty">ESwarmState</span>::Idle &amp;&amp; PlayerActor)
+    {
+        <span class="kw">float</span> DistSquaredToPlayer = <span class="ty">FVector</span>::DistSquared(GetActorLocation(), PlayerActor-&gt;GetActorLocation());
+        <span class="kw">if</span> (DistSquaredToPlayer &lt; RushTriggerDistance * RushTriggerDistance)
+        {
+            EnterState(<span class="ty">ESwarmState</span>::Rush);
+        }
+    }
+
+    <span class="kw">switch</span> (CurrentState)
+    {
+        <span class="kw">case</span> <span class="ty">ESwarmState</span>::Rush:
+            CohesionTarget = PlayerActor ? PlayerActor-&gt;GetActorLocation() : GetActorLocation();
+
+            <span class="kw">if</span> (StateTimer &gt;= RushDuration)
+            {
+                EnterState(<span class="ty">ESwarmState</span>::Regroup);
+            }
+            <span class="kw">break</span>;
+
+        <span class="kw">case</span> <span class="ty">ESwarmState</span>::Orbit:
+        {
+            <span class="kw">if</span> (PlayerActor)
+            {
+                <span class="cm">// StateTimer keeps climbing, so feeding it into Cos/Sin traces a circle around the player</span>
+                <span class="kw">float</span> Angle = StateTimer * OrbitAngularSpeed;
+                <span class="ty">FVector</span> PlayerLoc = PlayerActor-&gt;GetActorLocation();
+                CohesionTarget = PlayerLoc + <span class="ty">FVector</span>(
+                    <span class="ty">FMath</span>::Cos(Angle) * OrbitRadius,
+                    <span class="ty">FMath</span>::Sin(Angle) * OrbitRadius,
+                    0.f
+                );
+            }
+
+            <span class="kw">if</span> (StateTimer &gt;= OrbitDuration)
+            {
+                EnterState(<span class="ty">ESwarmState</span>::Rush);
+            }
+            <span class="kw">break</span>;
+        }
+
+        <span class="cm">// Idle and Regroup follow the same shape, see the full source</span>
+    }
+}</code></pre>
+    <div class="callout">
+      <p><strong>Why steer a target instead of the units?</strong> Because the swarm never teleports or snaps. When Rush ends and the target jumps back to the core, separation and alignment keep running, so the flock turns and streams home as a body instead of every unit reversing on the same frame.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">One Way In</div>
+    <p class="sec-intro">Every transition goes through <span class="mono">EnterState</span>. The timer reset and any on-enter effects live there, so no branch of the switch can forget them.</p>
+    <div class="srcpath"><a href="https://github.com/Oj-cd/ue5-swarm-boss/blob/main/Source/LDP/Private/SwarmManager.cpp">Source/LDP/Private/SwarmManager.cpp ↗</a></div>
+<pre><code><span class="kw">void</span> <span class="ty">ASwarmManager</span>::EnterState(<span class="ty">ESwarmState</span> NewState)
+{
+    CurrentState = NewState;
+    StateTimer = 0.f;
+
+    <span class="kw">if</span> (NewState == <span class="ty">ESwarmState</span>::Rush)
+    {
+        TriggerRushCameraShake();
+    }
+}</code></pre>
+    <ul class="bullets" style="margin-top:24px">
+      <li><strong>Camera shake is a class, not an instance.</strong> <span class="mono">RushCameraShake</span> is a <span class="mono">TSubclassOf&lt;UCameraShakeBase&gt;</span> picked in the editor; the player controller spawns the actual shake when Rush begins, and the call is skipped cleanly if none is assigned.</li>
+      <li><strong>Early rush uses a squared distance.</strong> The proximity check only needs a threshold, so it never pays for a square root.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Regroup Without Losing Tuning</div>
+    <p class="sec-intro">Regroup needs the swarm to pull in harder and move faster than normal, which means temporarily overriding two designer-tuned values.</p>
+    <div class="bug-card">
+      <h4>Restoring hardcoded values would erase tuning</h4>
+      <p>Writing fixed defaults back at the end of Regroup would silently throw away whatever cohesion and speed had been set in the details panel after the first state cycle.</p>
+      <div class="fix"><strong>Fix:</strong> <span class="mono">BeginPlay</span> snapshots <span class="mono">CohesionWeight</span> and <span class="mono">MaxSpeed</span> into <span class="mono">DefaultCohesionWeight</span> and <span class="mono">DefaultMaxSpeed</span>. Regroup applies <span class="mono">RegroupCohesionWeight</span> and <span class="mono">RegroupMaxSpeed</span>, then restores the snapshot on exit, so every value set in the editor survives any number of cycles.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">What I Would Change Next</div>
+    <ul class="bullets">
+      <li><strong>Transitions run on timers.</strong> Driving them from what the player is doing (distance, remaining health, damage dealt recently) would make the fight read as reactive rather than scripted.</li>
+      <li><strong>Movement ignores the world.</strong> Units steer in open space with no obstacle avoidance or navmesh awareness. That suits the arena it was built for but would not survive a cluttered level.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="flocking.html">← Flocking &amp; Rendering</a>
+    <a href="damage.html">Damage &amp; Core Exposure →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>

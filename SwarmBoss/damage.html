@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swarm Damage · Jerry Olaojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ash:#16181f;--char:#20232d;--line:#31353f;--parchment:#ece5da;--smoke:#9aa0ad;--ember:#d1495b;--flame:#e8853d;--max:min(94vw,1900px)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ash);color:var(--parchment);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--parchment)}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,6vw,48px)}
+.mono{font-family:"IBM Plex Mono",monospace}
+nav{position:sticky;top:0;z-index:10;background:rgba(22,24,31,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:32px;height:60px}
+.navname{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:.02em;text-decoration:none;white-space:nowrap;margin-right:auto}
+.navname span{color:var(--ember)}
+.navlinks{display:flex;gap:20px;overflow-x:auto}
+.navlinks a{font-size:13px;color:var(--smoke);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+.navlinks a:hover,.navlinks a.active{color:var(--parchment)}
+.navlinks a.active{color:var(--flame)}
+.detail-hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.breadcrumb{font-size:13px;color:var(--smoke);margin-bottom:18px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.breadcrumb a{color:var(--smoke);text-decoration:none}.breadcrumb a:hover{color:var(--parchment)}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.06;letter-spacing:-.015em}
+.detail-sub{margin-top:16px;max-width:62ch;color:var(--smoke);font-size:17px;line-height:1.6}
+.detail-sub strong{color:var(--parchment);font-weight:600}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.2rem;margin-bottom:6px}
+.sec-intro{color:var(--smoke);margin-bottom:24px;max-width:66ch;font-size:16px}
+.bullets{list-style:none;display:flex;flex-direction:column;gap:16px}
+.bullets li{position:relative;padding-left:20px;color:var(--smoke);font-size:16px;line-height:1.7}
+.bullets li::before{content:"▪";color:var(--ember);position:absolute;left:0;top:2px}
+.bullets li strong{color:var(--parchment);font-weight:600}
+.bug-card{background:var(--char);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-top:16px}
+.bug-card h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:.92rem;color:var(--parchment);margin-bottom:8px}
+.bug-card p{color:var(--smoke);font-size:14.5px;line-height:1.6}
+.bug-card .fix{margin-top:8px;color:var(--smoke);font-size:14px;border-top:1px solid var(--line);padding-top:8px}
+.bug-card .fix strong{color:var(--flame)}
+.callout{background:var(--char);border:1px solid var(--line);border-left:3px solid var(--ember);border-radius:6px;padding:18px 22px;margin-top:24px}
+.callout p{color:var(--smoke);font-size:15.5px;line-height:1.65}
+.callout p strong{color:var(--parchment)}
+pre{background:var(--char);border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin-top:22px}
+.srcpath{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--smoke);background:var(--char);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;padding:9px 20px;margin-top:22px;letter-spacing:.02em}
+.srcpath + pre{margin-top:0;border-radius:0 0 6px 6px}
+.srcpath a{color:inherit;text-decoration:none}.srcpath a:hover{color:var(--parchment)}
+code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;color:var(--parchment);line-height:1.7}
+.kw{color:var(--flame)} .cm{color:var(--smoke);font-style:italic} .ty{color:#7ec8c8}
+.page-nav{display:flex;justify-content:space-between;align-items:center;padding:36px 0;flex-wrap:wrap;gap:14px}
+.page-nav a{color:var(--smoke);text-decoration:none;font-size:14px;letter-spacing:.02em}
+.page-nav a:hover{color:var(--parchment)}
+footer{padding:28px 0;border-top:1px solid var(--line);color:var(--smoke);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.navlinks{display:none}}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="navname" href="../index.html">JERRY<span>&nbsp;OLAOJO</span></a>
+    <div class="navlinks">
+      <a href="../index.html">← Portfolio</a>
+      <a href="flocking.html">Flocking</a>
+      <a href="state-machine.html">State Machine</a>
+      <a href="damage.html" class="active">Damage</a>
+      <a href="https://github.com/Oj-cd/ue5-swarm-boss">Source ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header class="detail-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../index.html">Portfolio</a> / <a href="../index.html#projects">Swarm Boss</a> / Damage</div>
+    <div class="eyebrow">Swarm Boss · Unreal Engine 5 · C++</div>
+    <h1>Damage &amp; Core Exposure</h1>
+    <p class="detail-sub">The swarm takes damage as <strong>one body</strong> through Unreal's standard damage pipeline, converts it into unit kills, and <strong>opens the core</strong> once enough of it is gone. Presentation hooks out to Blueprint so the simulation never has to know about it.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Damage Against a Crowd</div>
+    <p class="sec-intro">Weapons call <span class="mono">ApplyPointDamage</span> like they would on any actor. <span class="mono">TakeDamage</span> pools the incoming damage and pays it out as kills at <span class="mono">DamagePerKill</span> each.</p>
+    <div class="srcpath"><a href="https://github.com/Oj-cd/ue5-swarm-boss/blob/main/Source/LDP/Private/SwarmManager.cpp">Source/LDP/Private/SwarmManager.cpp ↗</a></div>
+<pre><code><span class="kw">float</span> <span class="ty">ASwarmManager</span>::TakeDamage(<span class="kw">float</span> DamageAmount, <span class="ty">FDamageEvent</span> <span class="kw">const</span>&amp; DamageEvent,
+    <span class="ty">AController</span>* EventInstigator, <span class="ty">AActor</span>* DamageCauser)
+{
+    <span class="kw">float</span> ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+    <span class="kw">if</span> (ActualDamage &lt;= 0.f || AliveUnitCount &lt;= 0) <span class="kw">return</span> ActualDamage;
+
+    <span class="cm">// FPointDamageEvent carries the exact impact point, fall back to the actor location if it isn't one</span>
+    <span class="ty">FVector</span> HitLocation = GetActorLocation();
+    <span class="kw">if</span> (DamageEvent.IsOfType(<span class="ty">FPointDamageEvent</span>::ClassID))
+    {
+        <span class="kw">const</span> <span class="ty">FPointDamageEvent</span>* PointDamage = <span class="kw">static_cast</span>&lt;<span class="kw">const</span> <span class="ty">FPointDamageEvent</span>*&gt;(&amp;DamageEvent);
+        HitLocation = PointDamage-&gt;HitInfo.ImpactPoint;
+    }
+
+    OnSwarmHit(ActualDamage, HitLocation);
+
+    DamagePool += ActualDamage;
+
+    AliveIndices.Reset();
+    <span class="kw">for</span> (<span class="ty">int32</span> i = 0; i &lt; Units.Num(); i++)
+    {
+        <span class="kw">if</span> (Units[i].bIsAlive) AliveIndices.Add(i);
+    }
+
+    <span class="cm">// while instead of if so a single big hit like an AOE can kill multiple units in one shot</span>
+    <span class="kw">while</span> (DamagePool &gt;= DamagePerKill &amp;&amp; AliveIndices.Num() &gt; 0)
+    {
+        DamagePool -= DamagePerKill;
+
+        <span class="cm">// swapping the picked entry with the last one and popping is O(1)</span>
+        <span class="ty">int32</span> PickedSlot = <span class="ty">FMath</span>::RandRange(0, AliveIndices.Num() - 1);
+        <span class="ty">int32</span> UnitIndex = AliveIndices[PickedSlot];
+        AliveIndices.RemoveAtSwap(PickedSlot, 1, <span class="ty">EAllowShrinking</span>::No);
+
+        KillUnit(UnitIndex);
+    }
+
+    <span class="kw">return</span> ActualDamage;
+}</code></pre>
+    <ul class="bullets" style="margin-top:24px">
+      <li><strong>Leftover damage carries over.</strong> Anything under <span class="mono">DamagePerKill</span> stays in the pool for the next hit, so weak rapid-fire weapons still thin the swarm at the right rate.</li>
+      <li><strong>Kills are random, removal is O(1).</strong> A random living unit is picked and removed from the candidate list with <span class="mono">RemoveAtSwap</span> instead of shifting the rest of the array down.</li>
+      <li><strong>The cast is safe without <span class="mono">Cast&lt;&gt;</span>.</strong> <span class="mono">IsOfType</span> already confirmed the event type, and <span class="mono">Cast&lt;&gt;</span> only works on UObjects, which a damage event struct is not.</li>
+    </ul>
+    <div class="bug-card">
+      <h4>An AOE allocated an array per kill</h4>
+      <p>The living-unit candidate list used to be rebuilt inside the kill loop, so one big area hit that took out dozens of units built dozens of arrays in a single frame.</p>
+      <div class="fix"><strong>Fix:</strong> build the list once per damage event, into a member array reserved at spawn, and remove from it as units die. Resolving any number of kills now allocates nothing.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">Opening the Core</div>
+    <p class="sec-intro">Once the swarm is thinned below <span class="mono">CoreExposureFraction</span> of its starting count, the core underneath becomes hittable.</p>
+    <div class="srcpath"><a href="https://github.com/Oj-cd/ue5-swarm-boss/blob/main/Source/LDP/Private/SwarmManager.cpp">Source/LDP/Private/SwarmManager.cpp ↗</a></div>
+<pre><code><span class="kw">void</span> <span class="ty">ASwarmManager</span>::KillUnit(<span class="ty">int32</span> UnitIndex)
+{
+    <span class="kw">if</span> (!Units.IsValidIndex(UnitIndex)) <span class="kw">return</span>;
+    <span class="kw">if</span> (!Units[UnitIndex].bIsAlive) <span class="kw">return</span>;
+
+    Units[UnitIndex].bIsAlive = <span class="kw">false</span>;
+    AliveUnitCount--;
+
+    <span class="ty">int32</span> ExposureThreshold = <span class="ty">FMath</span>::FloorToInt(UnitCount * CoreExposureFraction);
+    <span class="kw">if</span> (!bCoreExposed &amp;&amp; AliveUnitCount &lt;= ExposureThreshold)
+    {
+        bCoreExposed = <span class="kw">true</span>;
+
+        <span class="kw">if</span> (CoreActor)
+        {
+            <span class="ty">UPrimitiveComponent</span>* CorePrimitive = <span class="ty">Cast</span>&lt;<span class="ty">UPrimitiveComponent</span>&gt;(CoreActor-&gt;GetRootComponent());
+            <span class="kw">if</span> (CorePrimitive)
+            {
+                CorePrimitive-&gt;SetCollisionEnabled(<span class="ty">ECollisionEnabled</span>::QueryAndPhysics);
+                CorePrimitive-&gt;SetCollisionResponseToAllChannels(ECR_Block);
+            }
+        }
+
+        OnCoreExposed();
+    }
+}</code></pre>
+    <div class="bug-card">
+      <h4>The core sometimes never opened</h4>
+      <p>The threshold check originally used <span class="mono">==</span>. Single-target hits stepped the count down one at a time and hit it exactly, but an area hit that killed several units at once could step straight past the threshold, and the core stayed shut for the rest of the fight.</p>
+      <div class="fix"><strong>Fix:</strong> compare with <span class="mono">&lt;=</span> and guard with <span class="mono">bCoreExposed</span>, so exposure fires on the first crossing no matter how big the step, and exactly once.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-title">C++ Simulation, Blueprint Presentation</div>
+    <p class="sec-intro">C++ owns the simulation. Everything the player sees or hears as a reaction is raised as an event and implemented in a Blueprint child.</p>
+    <div class="srcpath"><a href="https://github.com/Oj-cd/ue5-swarm-boss/blob/main/Source/LDP/Public/SwarmManager.h">Source/LDP/Public/SwarmManager.h ↗</a></div>
+<pre><code><span class="cm">// triggers from c++, implemented in the blueprint child so I can hook up floating damage text</span>
+UFUNCTION(BlueprintImplementableEvent, Category = <span class="ty">"Swarm|Combat"</span>)
+<span class="kw">void</span> OnSwarmHit(<span class="kw">float</span> DamageAmount, <span class="ty">FVector</span> HitLocation);
+
+<span class="cm">// triggers in blueprint when the core becomes exposed so I can swap material, play a sound etc</span>
+UFUNCTION(BlueprintImplementableEvent, Category = <span class="ty">"Swarm|Combat"</span>)
+<span class="kw">void</span> OnCoreExposed();</code></pre>
+    <ul class="bullets" style="margin-top:24px">
+      <li><strong>Every tuning value is exposed.</strong> Unit count, Boids weights, state timings, damage per kill and exposure fraction are all <span class="mono">EditAnywhere</span>, grouped under <span class="mono">Swarm|Spawn</span>, <span class="mono">Boids</span>, <span class="mono">States</span>, <span class="mono">Combat</span> and <span class="mono">Feel</span>. <span class="mono">DamagePool</span> is <span class="mono">VisibleAnywhere</span> so it can be watched live during play without being editable.</li>
+      <li><strong>The swarm is a normal damage target.</strong> The instanced mesh is the root with <span class="mono">WorldDynamic</span> collision that blocks everything, so any weapon trace lands on it with no special-case code.</li>
+    </ul>
+    <div class="bug-card">
+      <h4>Constructor collision settings were overwritten</h4>
+      <p>Setting the swarm to ignore the camera channel in the constructor did nothing at runtime. The Blueprint child serializes its own copy of the component's collision settings, and that copy is loaded over whatever the constructor set.</p>
+      <div class="fix"><strong>Fix:</strong> apply the camera ignore in <span class="mono">BeginPlay</span>, which runs after the Blueprint data is loaded, so the C++ setting always wins and the camera no longer collides with the swarm.</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="wrap">
+  <div class="page-nav">
+    <a href="state-machine.html">← State Machine</a>
+    <a href="../index.html#projects">Back to Portfolio →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jerry Olaojo</span>
+    <a href="../index.html" style="color:var(--smoke);text-decoration:none">← Back to portfolio</a>
+  </div>
+</footer>
+
+</body>
+</html>
